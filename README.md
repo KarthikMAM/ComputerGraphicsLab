@@ -19,3 +19,8 @@ An archive of all the exercises of Computer Graphics Lab in Semester 5 of my eng
   <li>This will open a new window with the required output
 </ul>
 
+<h4>Opengl Templates</h4>
+<ul>
+  <li><a href="https://github.com/KarthikMAM/ComputerGraphicsLab/blob/master/Templates/OPENGL%20TEMPLATE%202D.cpp">2d Template</a>
+  <li><a href="https://github.com/KarthikMAM/ComputerGraphicsLab/blob/master/Templates/OPENGL%20TEMPLATE%203D.cpp">3d Template</a>
+</ul>
