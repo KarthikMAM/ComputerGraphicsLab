@@ -13,7 +13,7 @@ const float PLANE_LEFT = 0.0;
 const float PLANE_RIGHT = WINDOW_WIDTH;
 const float PLANE_BOTTOM = 0.0;
 const float PLANE_TOP = WINDOW_HEIGHT;
-const int POINT_SIZE = 5;
+const int POINT_SIZE = 2;
 
 /*Create the variables here*/
 float x1, y1, x2, y2;
@@ -32,60 +32,56 @@ void canvasInit() {
 void myDisplay() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if(m <= 1) {
-        //Swap the points to start from left to right
-        int fx = x1, fy = y1;
+    if (m > -1 && m < 1) {
+        //Sampling in x-direction from left to right
+        //Swap if from right to left
         if(x1 > x2) {
-            fx = x1; fy = y1;
-            x1 = x2; y1 = y2;
-            x2 = fx; y2 = fy;
+            int temp;
+            temp = x1; x1 = x2; x2 = temp;
+            temp = y1; y1 = y2; y2 = temp;
         }
 
-        //Calculate values for computation
+        //Calculation Parameters
+        int yInc = (y2 - y1) >= 0 ? 1 : -1;
         int dx = x2 - x1;
-        int dy = y2 - y1;
+        int dy = yInc * (y2 - y1);
         int pk = 2 * dy - dx;
 
-        //Draw the actual line
+        //Bresenham Algorithm slope between -1 to +1
         glBegin(GL_POINTS);
-            while (fx < x2) {
-                if(pk < 0) {
-                    fx++;
-                    pk += 2 * dy;
-                } else {
-                    fx++; fy++;
-                    pk += 2 * (dy - dx);
+            for (int x = x1, y = y1; x <= x2; x++) {
+                glVertex2d(x, y);
+                if (pk < 0) { pk += 2 * dy; }
+                else {
+                    y += yInc;
+                    pk += 2 * ( dy - dx );
                 }
-
-                glVertex2d(fx, fy);
             }
         glEnd();
     } else {
-        //Swap the points to start from left to right
-        int fx = x1, fy = y1;
+        //Sampling in y-direction from left to right
+        //Swap if from right to left
         if(y1 > y2) {
-            fx = x1; fy = y1;
-            x1 = x2; y1 = y2;
-            x2 = fx; y2 = fy;
+            int temp;
+            temp = x1; x1 = x2; x2 = temp;
+            temp = y1; y1 = y2; y2 = temp;
         }
 
-        //Calculate values for computation
-        int dx = x2 - x1;
+        //Calculation Parameters
+        int xInc = (x2 - x1) >= 0 ? 1 : -1;
+        int dx = xInc * (x2 - x1);
         int dy = y2 - y1;
         int pk = 2 * dx - dy;
 
-        //Draw the actual line
+        //Bresenham algorithm for slope -inf to -1 and +1 to +inf
         glBegin(GL_POINTS);
-            while (fy < y2) {
-                if(pk < 0) {
-                    fy++;
-                    pk += 2 * dx;
-                } else {
-                    fx++; fy++;
-                    pk += 2 * (dx - dy);
+            for (int x = x1, y = y1; y <= y2; y++) {
+                glVertex2d(x, y);
+                if (pk < 0) { pk += 2 * dx; }
+                else {
+                    x += xInc;
+                    pk += 2 * ( dx - dy );
                 }
-
-                glVertex2d(fx, fy);
             }
         glEnd();
     }
